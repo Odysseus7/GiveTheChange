@@ -4,7 +4,7 @@
   "description": "Save your change",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile:sass": "node-sass src/sass/main.scss src/css/style.css -w"
   },
   "repository": {
     "type": "git",
