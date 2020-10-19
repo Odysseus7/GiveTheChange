@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Give The Change</title>
 </head>
 <body>
-    <div class="header">
-        <img src="src/logo.svg" alt="Give The Change logo" class="header_logo">
+    <div class="container">
+        <div class="header">
+            <img src="/logo.svg" alt="Give The Change logo" class="header_logo">
+        </div>
+        
+        <div class="main">
+            <h1 class="main_heading">Total change saved by <strong><%= name %></strong></h1>
+            <p class="amount">&euro;21,77</p>
+            <form action="/" method="POST">
+                <input type="number" class="money" placeholder="2,56">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     </div>
-    <div class="main">
-        <h1 class="main-heading">Total change saved by <strong><%= name %></strong></h1>
-        <p class="amount">&euro;21,77</p>
-        <form action="/" method="POST">
-            <input type="number" class="money" placeholder="7,00">
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+    
 </body>
 </html>
