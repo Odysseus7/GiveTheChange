@@ -16,8 +16,8 @@
             <h1 class="main_heading">Total change saved by <strong><%= name %></strong></h1>
             <p class="amount">&euro;21,77</p>
             <form action="/" method="POST">
-                <input type="number" class="money" placeholder="2,56">
-                <button type="submit">Submit</button>
+                <input type="number" class="money" placeholder="2,56" min="0.01" max="1000.00" step="0.01">
+                <button type="submit" class="btn btn-outline">Submit</button>
             </form>
         </div>
     </div>

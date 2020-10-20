@@ -20,11 +20,13 @@ body {
     align-items: center;
 
     &_heading {
+        margin-top: 8rem;
         font-weight: 400;
     }
 
     .amount {
         font-size: 6rem;
+        letter-spacing: 8px;
         font-weight: 600;
     }
 
@@ -42,6 +44,7 @@ body {
             font-weight: 400;
             text-align: center;
             background: transparent;
+            padding-bottom: 10px;
             border-bottom: 2px solid #fff;
             width: 12rem;
         }
@@ -53,8 +56,37 @@ body {
         
     }
 
-    button {
-        margin-top: 2rem;
+    .btn {
+        margin-top: 4rem;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        &-outline {
+            position: relative;
+            z-index: 3;
+            background: transparent;
+            color: #fff;
+            font-size: 14px;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 8px;
+            padding: 10px 50px;
+            text-transform: uppercase;
+            transition: all 0.2s linear;
+            a {
+                text-decoration: none;
+            }
+        }
+        &-outline:hover {
+            color: #ef6129;
+            background: #fff;
+            border-color: #fff;
+            transition: all 0.2s linear;
+        }
+        &-outline:active {
+            border-radius: 22px;
+        }
     }
 }
 

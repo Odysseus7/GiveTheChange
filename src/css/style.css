@@ -16,9 +16,11 @@ body {
   justify-content: center;
   align-items: center; }
   .main_heading {
+    margin-top: 8rem;
     font-weight: 400; }
   .main .amount {
     font-size: 6rem;
+    letter-spacing: 8px;
     font-weight: 600; }
   .main form {
     display: flex;
@@ -33,13 +35,39 @@ body {
       font-weight: 400;
       text-align: center;
       background: transparent;
+      padding-bottom: 10px;
       border-bottom: 2px solid #fff;
       width: 12rem; }
     .main form input::placeholder,
     .main form input:focus {
       color: #fff; }
-  .main button {
-    margin-top: 2rem; }
+  .main .btn {
+    margin-top: 4rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none; }
+    .main .btn-outline {
+      position: relative;
+      z-index: 3;
+      background: transparent;
+      color: #fff;
+      font-size: 14px;
+      border-color: #fff;
+      border-style: solid;
+      border-width: 2px;
+      border-radius: 8px;
+      padding: 10px 50px;
+      text-transform: uppercase;
+      transition: all 0.2s linear; }
+      .main .btn-outline a {
+        text-decoration: none; }
+    .main .btn-outline:hover {
+      color: #ef6129;
+      background: #fff;
+      border-color: #fff;
+      transition: all 0.2s linear; }
+    .main .btn-outline:active {
+      border-radius: 22px; }
 
 .header {
   margin-top: 4rem; }
