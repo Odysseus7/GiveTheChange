@@ -3,6 +3,8 @@ const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const lodash = require("lodash");
 const mongoose = require("mongoose");
+const numeral = require("numeral");
+const math = require("mathjs");
 
 const app = express();
 const port = 3000;
@@ -28,7 +30,8 @@ app.get('/', (req,res) => {
             balance = user.balance;
             res.render("index", {
                 username,
-                balance
+                balance: math.round(balance, 2),
+                
             });
         } else {
             console.log("Admin not found");
@@ -36,8 +39,21 @@ app.get('/', (req,res) => {
     });
 });
 
-app.post('/', (req, res) => {
-    console.log((req.body.money).split("."));
+app.post('/', async (req, res) => {
+    // Only get decimal part of change
+    let dec = parseInt((req.body.money).split(".")[1]);
+
+    // check if no leading zeroes were entered
+    if((req.body.money).split(".")[1].length === 1) {
+        dec = parseInt((req.body.money).split(".")[1] + "0");
+    }
+
+    const cents = dec / 100;
+    const change = math.round(1 - cents, 2);
+
+
+    await User.findOneAndUpdate({username: "Chalita"}, {balance: balance + change});
+    res.redirect('/');
 });
 
 app.listen(port, () => {
