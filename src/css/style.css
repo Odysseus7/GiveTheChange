@@ -30,19 +30,20 @@ body {
       border: 0;
       outline: 0;
       color: #fff;
-      font-size: 2rem;
+      font-size: 1.5rem;
       letter-spacing: 3px;
       font-weight: 400;
-      text-align: center;
       background: transparent;
+      text-align: center;
       padding-bottom: 10px;
       border-bottom: 2px solid #fff;
+      margin-bottom: 3rem;
       width: 12rem; }
     .main form input::placeholder,
     .main form input:focus {
       color: #fff; }
   .main .btn {
-    margin-top: 4rem;
+    margin-top: 2rem;
     font-weight: 600;
     cursor: pointer;
     outline: none; }
