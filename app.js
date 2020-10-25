@@ -17,6 +17,7 @@ mongoose.connect("mongodb://localhost:27017/changeDB", {useNewUrlParser: true, u
 
 const userSchema = new mongoose.Schema({
     username: String,
+    password: String,
     balance: Number
 });
 
@@ -26,8 +27,51 @@ app.get('/', (req,res) => {
     res.render("login");
 });
 
+app.post('/', (req, res) => {
+
+});
+
 app.get("/register", (req, res) => {
     res.render("register");
+});
+
+app.post("/register", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.findOne({username}, (err, user) => {
+        // if user doesn't exist, create user
+        if(!user) {
+            bcrypt.hash(password, 10, function(err, hash) {
+                // Store hash in your password DB.
+                const user = new User({
+                    username,
+                    password: hash,
+                    balance: 0
+                });
+        
+                try {
+                    user.save();
+                    res.render("overview", {
+                        username: user.username,
+                        balance: user.balance
+                    })
+                } catch (e) {
+                    console.log(e);
+                    res.redirect("register");
+                }
+            });
+        } else {
+            console.log("This user already exists.");
+            res.redirect("register");
+        }
+    })
+
+    
+
+    
+    
+    
 });
 
 
