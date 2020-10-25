@@ -28,7 +28,24 @@ app.get('/', (req,res) => {
 });
 
 app.post('/', (req, res) => {
-
+    
+    // find user
+    User.findOne({username: req.body.username}, (err, user) => {
+        if(user) {
+            // check if password is valid
+            bcrypt.compare(req.body.password, user.password, function(err, result) {
+                if(result) {
+                    res.render("overview", {
+                        username: user.username,
+                        balance: user.balance
+                    });
+                }
+            });
+        } else {
+            console.log("login failed");
+        }
+    });
+    
 });
 
 app.get("/register", (req, res) => {
