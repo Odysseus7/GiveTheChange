@@ -26,6 +26,10 @@ app.get('/', (req,res) => {
     res.render("login");
 });
 
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
 
 function calculateChange(amount) {
     // Only get decimal part of change

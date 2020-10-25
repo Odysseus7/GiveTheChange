@@ -15,6 +15,12 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center; }
+  .main h1 {
+    margin-bottom: 4rem; }
+  .main a {
+    text-decoration: none;
+    color: #fff;
+    text-transform: uppercase; }
   .main_heading {
     margin-top: 8rem;
     font-weight: 400; }
