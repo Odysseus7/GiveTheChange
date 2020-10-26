@@ -2,9 +2,13 @@ const express = require("express");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
+
 const math = require("mathjs");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+const session = require('express-session');
+require('dotenv').config()
+
 
 const app = express();
 const port = 3000;
@@ -12,6 +16,17 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('src'))
 app.set('view engine', 'ejs');
+
+// create session
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/changeDB", {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -21,7 +36,14 @@ const userSchema = new mongoose.Schema({
     balance: Number
 });
 
+User.plugin(passportLocalMongoose);
+
 const User = new mongoose.model("User", userSchema);
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req,res) => {
     res.render("login");
@@ -29,22 +51,6 @@ app.get('/', (req,res) => {
 
 app.post('/', (req, res) => {
     
-    // find user
-    User.findOne({username: req.body.username}, (err, user) => {
-        if(user) {
-            // check if password is valid
-            bcrypt.compare(req.body.password, user.password, function(err, result) {
-                if(result) {
-                    res.render("overview", {
-                        username: user.username,
-                        balance: user.balance
-                    });
-                }
-            });
-        } else {
-            console.log("login failed");
-        }
-    });
     
 });
 
@@ -53,41 +59,8 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
 
-    User.findOne({username}, (err, user) => {
-        // if user doesn't exist, create user
-        if(!user) {
-            bcrypt.hash(password, 10, function(err, hash) {
-                // Store hash in your password DB.
-                const user = new User({
-                    username,
-                    password: hash,
-                    balance: 0
-                });
-        
-                try {
-                    user.save();
-                    res.render("overview", {
-                        username: user.username,
-                        balance: user.balance
-                    })
-                } catch (e) {
-                    console.log(e);
-                    res.redirect("register");
-                }
-            });
-        } else {
-            console.log("This user already exists.");
-            res.redirect("register");
-        }
-    })
 
-    
-
-    
-    
     
 });
 
