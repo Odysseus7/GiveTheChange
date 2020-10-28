@@ -125,12 +125,13 @@ app.get("/overview", (req, res) => {
 app.post("/overview", async (req, res) => {
     if(req.isAuthenticated()) {
         let change = calculateChange(req.body.money);
-        const user = await User.findOne({username: req.user.username}, (err, user) => {
-            return user;
-        });
-
-        await User.findOneAndUpdate({username: req.user.username }, {balance: user.balance + change});
-        res.redirect("/overview");
+        try {
+            await User.findOneAndUpdate({username: req.user.username }, {balance: req.user.balance + change});
+            res.redirect("/overview");
+        } catch(error) {
+            console.log(error);
+        }
+                
     } else {
         res.redirect("/login");
     }
