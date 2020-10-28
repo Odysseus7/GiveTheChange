@@ -122,13 +122,14 @@ app.get("/overview", (req, res) => {
     }
 });
 
-app.post("/overview", (req, res) => {
+app.post("/overview", async (req, res) => {
     if(req.isAuthenticated()) {
         let change = calculateChange(req.body.money);
-        User.findOne({ username: req.user.username }, (err, user) => {
-            return user.balance;
+        const user = await User.findOne({username: req.user.username}, (err, user) => {
+            return user;
         });
-        User.findOneAndUpdate({username: req.user.username}, {balance: money.balance + change});
+
+        await User.findOneAndUpdate({username: req.user.username }, {balance: user.balance + change});
         res.redirect("/overview");
     } else {
         res.redirect("/login");
