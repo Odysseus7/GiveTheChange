@@ -1,13 +1,10 @@
+require('dotenv').config();
 const express = require("express");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const math = require("mathjs");
-const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose");
-const session = require('express-session');
-require('dotenv').config()
 
 
 const app = express();
@@ -17,17 +14,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('src'))
 app.set('view engine', 'ejs');
 
-// create session
-app.use(session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
 mongoose.connect("mongodb://localhost:27017/changeDB", {useNewUrlParser: true, useUnifiedTopology: true});
 
 const userSchema = new mongoose.Schema({
@@ -36,17 +22,12 @@ const userSchema = new mongoose.Schema({
     balance: Number
 });
 
-User.plugin(passportLocalMongoose);
+
 
 const User = new mongoose.model("User", userSchema);
 
-passport.use(User.createStrategy());
-
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
 app.get('/', (req,res) => {
-    res.render("login");
+    res.send("hoi");
 });
 
 app.post('/', (req, res) => {
@@ -54,15 +35,26 @@ app.post('/', (req, res) => {
     
 });
 
+app.get('/login', (req, res) => {
+    res.render("login");
+});
+
+app.post('/login', 
+
+);
+
 app.get("/register", (req, res) => {
     res.render("register");
 });
 
 app.post("/register", (req, res) => {
 
-
-    
 });
+
+app.get("/overview", (req,res) => {
+
+});
+
 
 
 function calculateChange(amount) {
