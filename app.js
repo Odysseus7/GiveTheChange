@@ -12,7 +12,10 @@ const { re } = require('mathjs');
 
 
 const app = express();
-const port = 3000;
+let port = process.env.PORT;
+if (port == null || port == "") {
+    port = 3000;
+}
 
 const expressSession = require('express-session')({
     secret: process.env.SECRET,
@@ -33,7 +36,7 @@ app.set('view engine', 'ejs');
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/changeDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(`mongodb+srv://root:${process.env.MONGODB_PASSWORD}@cluster0.hrhid.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const userSchema = new mongoose.Schema({
     username: String,
