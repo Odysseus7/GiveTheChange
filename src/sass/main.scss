@@ -10,17 +10,26 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
+}
+
+.header {
+    height: 30vh;
+    img {
+        padding: 0 0 6rem 0;
+        height: 6rem;
+    }
 }
 
 .main {
-    height: 60vh;
+    height: 40vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
     h1 {
-       margin-bottom: 4rem;
+       padding: 2rem;
     }
 
     a {
@@ -30,14 +39,15 @@ body {
     }
 
     &_heading {
-        margin-top: 8rem;
+        padding: 4rem 0;
         font-weight: 400;
     }
 
     .amount {
-        font-size: 6rem;
+        font-size: 4rem;
         letter-spacing: 8px;
         font-weight: 600;
+        margin-top: 1rem;
     }
 
     form {
@@ -101,9 +111,24 @@ body {
     }
 }
 
-.header {
-    margin-top: 4rem;
-    &_logo {
-        height: 7rem;
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    /* Styles */
+    .header {
+        img {
+            padding: 0 0 6rem 0;
+            height: 4rem;
+        }
+    }
+
+    .main {
+        
+        &_heading {
+            padding: 4rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .amount {
+            margin-top: 0;
+        }
     }
 }
