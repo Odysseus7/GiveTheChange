@@ -5,7 +5,6 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
-
 const passportLocalMongoose = require('passport-local-mongoose');
 const math = require("mathjs");
 const { re } = require('mathjs');
@@ -36,7 +35,7 @@ app.set('view engine', 'ejs');
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect(`mongodb+srv://root:${process.env.MONGODB_PASSWORD}@cluster0.hrhid.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(`mongodb+srv://root:${process.env.MONGODB_PASSWORD}@cluster0.hrhid.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 const userSchema = new mongoose.Schema({
     username: String,
@@ -86,12 +85,23 @@ app.get('/login', (req, res) => {
     res.render("login");
 });
 
-app.post('/login',
-  passport.authenticate('local'),
-  function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    res.redirect("/overview");
+app.post('/login', (req, res) => {
+    
+    var authenticate = User.authenticate();
+  authenticate(req.body.username, req.body.password, function(err, user) {
+    if (err) { console.log(err); } else {
+        req.login(user, err => {
+            if(err) {
+                console.log(err);
+            } else {
+                passport.authenticate("local", {failureFlash:true})(req, res, () => {
+                    res.redirect("/overview");
+                });
+            }
+        });
+    }
+    });
+    
 });
 
 app.get("/register", (req, res) => {
@@ -103,12 +113,13 @@ app.post("/register", (req, res) => {
         if (err) { console.log(err) }
         var authenticate = User.authenticate();
         authenticate(req.body.username, req.body.password, function(err, result) {
-          if (err) { console.log(err) }
+          if (err) { console.log(err) } else {
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.redirect("/overview");
+            });
+          }
           // Value 'result' is set to false. The user could not be authenticated since the user is not active
-          req.login(user, function(err) {
-            if (err) { return next(err); }
-            return res.redirect("/overview");
-          });
           
         });
       });
