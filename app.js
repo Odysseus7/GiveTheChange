@@ -71,6 +71,7 @@ passport.deserializeUser(function(id, cb) {
 });
 
 app.get('/', (req,res) => {
+    // Check if user is properly logged in
     if(req.isAuthenticated()) {
         res.render("overview", {
             username: req.user.username,
@@ -90,11 +91,12 @@ app.post('/login', (req, res) => {
     var authenticate = User.authenticate();
   authenticate(req.body.username, req.body.password, function(err, user) {
     if (err) { console.log(err); } else {
+        // Log the user in
         req.login(user, err => {
             if(err) {
                 console.log(err);
             } else {
-                passport.authenticate("local", {failureFlash:true})(req, res, () => {
+                passport.authenticate("local")(req, res, () => {
                     res.redirect("/overview");
                 });
             }
@@ -109,8 +111,10 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
+    // Create user and log them in
     User.register({username: req.body.username, balance: 0, active: true}, req.body.password, function(err, user) {
         if (err) { console.log(err) }
+
         var authenticate = User.authenticate();
         authenticate(req.body.username, req.body.password, function(err, result) {
           if (err) { console.log(err) } else {
@@ -119,17 +123,17 @@ app.post("/register", (req, res) => {
                 return res.redirect("/overview");
             });
           }
-          // Value 'result' is set to false. The user could not be authenticated since the user is not active
-          
         });
       });
 });
 
-app.get("/overview", (req, res) => {
+app.get("/overview", async (req, res) => {
     if(req.isAuthenticated()) {
+        const date = new Date();
+        const day = date.getDay();
         res.render("overview", {
             username: req.user.username,
-            balance: req.user.balance
+            balance: math.round(req.user.balance, 2)
         });
     } else {
         res.redirect("/login")
@@ -140,6 +144,7 @@ app.post("/overview", async (req, res) => {
     if(req.isAuthenticated()) {
         let change = calculateChange(req.body.money);
         try {
+            // Update balance
             await User.findOneAndUpdate({username: req.user.username }, {balance: req.user.balance + change});
             res.redirect("/overview");
         } catch(error) {
@@ -152,10 +157,19 @@ app.post("/overview", async (req, res) => {
     
 });
 
+app.get("/refresh", async (req, res) => {
+    if(req.isAuthenticated()) {
+        await User.findOneAndUpdate({username: req.user.username}, {balance: 0});
+        res.redirect("/overview");
+    } else {
+        res.redirect("login");
+    }
+    
+});
+
 app.get("/logout", (req, res) => {
     req.logout();
     res.redirect('/login');
-
 });
 
 
@@ -170,7 +184,7 @@ function calculateChange(amount) {
     }
 
     const cents = dec / 100;
-    const change = math.round(1 - cents, 2);
+    const change = 1 - cents;
     return change;
 }
 
