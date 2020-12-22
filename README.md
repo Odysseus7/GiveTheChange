@@ -10,6 +10,7 @@ I want to be able to track my progress and show recruiters what I am capable of.
 
 ## Tech/framework used
 
+- SASS
 - Express
 - Mongoose
 - PassportJS
